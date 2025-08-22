@@ -50,12 +50,9 @@
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const arrayBuffer = e.target.result;
-                player.load({ data: new Uint8Array(arrayBuffer) });
-            };
-            reader.readAsArrayBuffer(file);
+            // Create a blob URL for the file
+            const url = URL.createObjectURL(file);
+            player.load(url);
         }
     </script>
 </body>
