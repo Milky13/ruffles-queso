@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruffle Flash Emulator</title>
+    <title>Ruffle Flash Emulator - Local SWF</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,9 +29,9 @@
 </head>
 <body>
     <h1>Ruffle Flash Emulator</h1>
-    <p>Enter the URL of your .swf file to play:</p>
-    <input type="text" id="swfUrl" placeholder="https://example.com/yourfile.swf" size="50">
-    <button onclick="loadSWF()">Load SWF</button>
+    <p>Select a SWF file from your computer:</p>
+    <input type="file" id="swfFile" accept=".swf">
+    <button onclick="loadLocalSWF()">Load SWF</button>
 
     <div id="player"></div>
 
@@ -42,13 +42,20 @@
         const player = ruffle.createPlayer();
         document.getElementById("player").appendChild(player);
 
-        function loadSWF() {
-            const url = document.getElementById("swfUrl").value;
-            if(url) {
-                player.load(url);
-            } else {
-                alert("Please enter a valid SWF URL!");
+        function loadLocalSWF() {
+            const fileInput = document.getElementById("swfFile");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a SWF file!");
+                return;
             }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const arrayBuffer = e.target.result;
+                player.load({ data: new Uint8Array(arrayBuffer) });
+            };
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
